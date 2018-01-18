@@ -49,7 +49,8 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "BspI2CSoftDriver.h"
+#include "DrvMax.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -70,7 +71,11 @@ void MX_FREERTOS_Init(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-
+static void UserInit(void)
+{
+	BspI2CMasterInit();
+  DrvBaroMaxInit();
+}
 /* USER CODE END 0 */
 
 int main(void)
@@ -91,11 +96,11 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
 //  MX_RTC_Init();
-//  MX_SPI1_Init();
-//  MX_SPI2_Init();
+  MX_SPI1_Init();
+  MX_SPI2_Init();
 
   /* USER CODE BEGIN 2 */
-
+  UserInit();
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */

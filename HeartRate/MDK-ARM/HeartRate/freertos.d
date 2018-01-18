@@ -44,3 +44,13 @@ heartrate\freertos.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
 heartrate\freertos.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rtc.h
 heartrate\freertos.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rtc_ex.h
 heartrate\freertos.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h
+heartrate\freertos.o: ../USER/DRV/DrvMax.h
+heartrate\freertos.o: ../USER/BSP/config.h
+heartrate\freertos.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+heartrate\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+heartrate\freertos.o: ../Drivers/CMSIS/Include/core_cmFunc.h
+heartrate\freertos.o: ../USER/CMSIS_OS_USER/CMSIS_OS_SUPPLEMENT.h
+heartrate\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+heartrate\freertos.o: ../Drivers/CMSIS/Include/core_cmFunc.h
+heartrate\freertos.o: ../USER/TRACE/SEGGER_RTT.h
+heartrate\freertos.o: ../USER/BSP/BspI2CSoftDriver.h

@@ -45,10 +45,10 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "cmsis_os.h"
-#include "gpio.h"
 
 /* USER CODE BEGIN Includes */     
-
+#include "gpio.h"  
+#include "DrvMax.h"
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/
@@ -74,7 +74,7 @@ void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 /* USER CODE END FunctionPrototypes */
 
 /* Hook prototypes */
-
+u8 temp_num = 0;
 /* Init FreeRTOS */
 
 void MX_FREERTOS_Init(void) {
@@ -128,7 +128,8 @@ void StartDefaultTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    osDelay(500);
+    DrvBaroReadTemp(&temp_num);
   }
   /* USER CODE END StartDefaultTask */
 }
@@ -141,11 +142,11 @@ __weak void LedAndTestTask(void const * argument)
   for(;;)
   {
     osDelay(500);
-//    HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
-//    osDelay(500);
-//    HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
+    osDelay(500);
+    HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
 
-    HAL_GPIO_TogglePin(LED_GPIO_Port,LED_Pin);
+ //   HAL_GPIO_TogglePin(LED_GPIO_Port,LED_Pin);
   }
   /* USER CODE END LedAndTestTask */
 }

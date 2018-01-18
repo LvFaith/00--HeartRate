@@ -46,3 +46,13 @@ heartrate\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_group
 heartrate\main.o: ../Inc/rtc.h
 heartrate\main.o: ../Inc/spi.h
 heartrate\main.o: ../Inc/gpio.h
+heartrate\main.o: ../USER/BSP/BspI2CSoftDriver.h
+heartrate\main.o: ../USER/BSP/config.h
+heartrate\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+heartrate\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+heartrate\main.o: ../Drivers/CMSIS/Include/core_cmFunc.h
+heartrate\main.o: ../USER/CMSIS_OS_USER/CMSIS_OS_SUPPLEMENT.h
+heartrate\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+heartrate\main.o: ../Drivers/CMSIS/Include/core_cmFunc.h
+heartrate\main.o: ../USER/TRACE/SEGGER_RTT.h
+heartrate\main.o: ../USER/DRV/DrvMax.h

@@ -335,7 +335,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xB</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Inc; ../Drivers/STM32F1xx_HAL_Driver/Inc; ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy; ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3; ../Drivers/CMSIS/Device/ST/STM32F1xx/Include; ../Middlewares/Third_Party/FreeRTOS/Source/include; ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS; ../Drivers/CMSIS/Include; ../USER/APP; ../USER/DRV; ../USER/BSP; ../USER/CMSIS_OS_USER; ../USER/Common; ../USER/TRACE</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -385,9 +385,6 @@
               <FilePath>../Src/system_stm32f1xx.c</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>::CMSIS</GroupName>
         </Group>
         <Group>
           <GroupName>Drivers/STM32F1xx_HAL_Driver</GroupName>
@@ -573,6 +570,67 @@
               <FilePath>startup_stm32f103xb.s</FilePath>
             </File>
           </Files>
+        </Group>
+        <Group>
+          <GroupName>BSP</GroupName>
+          <Files>
+            <File>
+              <FileName>BspI2CSoftDriver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\BSP\BspI2CSoftDriver.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>DRV</GroupName>
+          <Files>
+            <File>
+              <FileName>DrvMax.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\DRV\DrvMax.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>APP</GroupName>
+        </Group>
+        <Group>
+          <GroupName>CMSIS_OS_USER</GroupName>
+          <Files>
+            <File>
+              <FileName>CMSIS_OS_SUPPLEMENT.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\CMSIS_OS_USER\CMSIS_OS_SUPPLEMENT.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Common</GroupName>
+          <Files>
+            <File>
+              <FileName>CommonStream.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\Common\CommonStream.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>TRACE</GroupName>
+          <Files>
+            <File>
+              <FileName>SEGGER_RTT.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\TRACE\SEGGER_RTT.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEGGER_RTT_printf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\TRACE\SEGGER_RTT_printf.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
     </Target>

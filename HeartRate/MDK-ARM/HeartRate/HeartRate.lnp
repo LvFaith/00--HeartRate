@@ -33,6 +33,12 @@
 "heartrate\event_groups.o"
 "heartrate\cmsis_os.o"
 "heartrate\startup_stm32f103xb.o"
+"heartrate\bspi2csoftdriver.o"
+"heartrate\drvmax.o"
+"heartrate\cmsis_os_supplement.o"
+"heartrate\commonstream.o"
+"heartrate\segger_rtt.o"
+"heartrate\segger_rtt_printf.o"
 --library_type=microlib --strict --scatter "HeartRate\HeartRate.sct"
 --diag_suppress=L6329 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
