@@ -51,6 +51,24 @@
 
 /* Private define ------------------------------------------------------------*/
 
+#define LED_Pin GPIO_PIN_13
+#define LED_GPIO_Port GPIOC
+#define SAVE_KEY_Pin GPIO_PIN_2
+#define SAVE_KEY_GPIO_Port GPIOA
+#define DOWN_KEY_Pin GPIO_PIN_3
+#define DOWN_KEY_GPIO_Port GPIOA
+#define SD_SPI1_NSS_Pin GPIO_PIN_4
+#define SD_SPI1_NSS_GPIO_Port GPIOA
+#define UP_KEY_Pin GPIO_PIN_0
+#define UP_KEY_GPIO_Port GPIOB
+#define SETUP_KEY_Pin GPIO_PIN_1
+#define SETUP_KEY_GPIO_Port GPIOB
+#define START_KEY_Pin GPIO_PIN_10
+#define START_KEY_GPIO_Port GPIOB
+#define LCD_SPI1_NSS_Pin GPIO_PIN_12
+#define LCD_SPI1_NSS_GPIO_Port GPIOB
+#define LCD_RS_Pin GPIO_PIN_8
+#define LCD_RS_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

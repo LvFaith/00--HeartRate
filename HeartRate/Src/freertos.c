@@ -45,6 +45,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "cmsis_os.h"
+#include "gpio.h"
 
 /* USER CODE BEGIN Includes */     
 
@@ -52,6 +53,9 @@
 
 /* Variables -----------------------------------------------------------------*/
 osThreadId defaultTaskHandle;
+osThreadId NameLedAndTestHandle;
+osThreadId NameProcessMaxHandle;
+osThreadId NameProcessKeyHandle;
 
 /* USER CODE BEGIN Variables */
 
@@ -59,6 +63,9 @@ osThreadId defaultTaskHandle;
 
 /* Function prototypes -------------------------------------------------------*/
 void StartDefaultTask(void const * argument);
+void LedAndTestTask(void const * argument);
+void ProcessMaxTask(void const * argument);
+void ProcessKeyTask(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -92,6 +99,18 @@ void MX_FREERTOS_Init(void) {
   osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
+  /* definition and creation of NameLedAndTest */
+  osThreadDef(NameLedAndTest, LedAndTestTask, osPriorityLow, 0, 64);
+  NameLedAndTestHandle = osThreadCreate(osThread(NameLedAndTest), NULL);
+
+  /* definition and creation of NameProcessMax */
+  osThreadDef(NameProcessMax, ProcessMaxTask, osPriorityNormal, 0, 128);
+  NameProcessMaxHandle = osThreadCreate(osThread(NameProcessMax), NULL);
+
+  /* definition and creation of NameProcessKey */
+  osThreadDef(NameProcessKey, ProcessKeyTask, osPriorityBelowNormal, 0, 128);
+  NameProcessKeyHandle = osThreadCreate(osThread(NameProcessKey), NULL);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -112,6 +131,47 @@ void StartDefaultTask(void const * argument)
     osDelay(1);
   }
   /* USER CODE END StartDefaultTask */
+}
+
+/* LedAndTestTask function */
+__weak void LedAndTestTask(void const * argument)
+{
+  /* USER CODE BEGIN LedAndTestTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(500);
+//    HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
+//    osDelay(500);
+//    HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+
+    HAL_GPIO_TogglePin(LED_GPIO_Port,LED_Pin);
+  }
+  /* USER CODE END LedAndTestTask */
+}
+
+/* ProcessMaxTask function */
+__weak void ProcessMaxTask(void const * argument)
+{
+  /* USER CODE BEGIN ProcessMaxTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END ProcessMaxTask */
+}
+
+/* ProcessKeyTask function */
+void ProcessKeyTask(void const * argument)
+{
+  /* USER CODE BEGIN ProcessKeyTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END ProcessKeyTask */
 }
 
 /* USER CODE BEGIN Application */
