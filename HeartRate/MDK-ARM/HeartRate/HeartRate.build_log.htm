@@ -28,14 +28,16 @@ Project File Date:  01/18/2018
 *** Using Compiler 'V5.06 update 4 (build 422)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'HeartRate'
 compiling DrvMax.c...
-..\USER\DRV\DrvMax.c(220): warning:  #177-D: variable "temp_int"  was declared but never referenced
+..\USER\DRV\DrvMax.c(252): warning:  #177-D: variable "FifoWrPtr"  was declared but never referenced
+    u8 FifoWrPtr;
+..\USER\DRV\DrvMax.c(270): warning:  #177-D: variable "temp_int"  was declared but never referenced
     u8 temp_int = 0, temp_fraction = 0;
-..\USER\DRV\DrvMax.c(220): warning:  #177-D: variable "temp_fraction"  was declared but never referenced
+..\USER\DRV\DrvMax.c(270): warning:  #177-D: variable "temp_fraction"  was declared but never referenced
     u8 temp_int = 0, temp_fraction = 0;
-..\USER\DRV\DrvMax.c: 2 warnings, 0 errors
+..\USER\DRV\DrvMax.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=9172 RO-data=452 RW-data=248 ZI-data=6600  
-"HeartRate\HeartRate.axf" - 0 Error(s), 2 Warning(s).
+Program Size: Code=9180 RO-data=452 RW-data=252 ZI-data=6596  
+"HeartRate\HeartRate.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -53,7 +55,7 @@ Package Vendor: ARM
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.0
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>

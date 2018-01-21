@@ -75,6 +75,7 @@ void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /* Hook prototypes */
 u8 temp_num = 0;
+u8 max_fifo_data[6] = {0};
 /* Init FreeRTOS */
 
 void MX_FREERTOS_Init(void) {
@@ -128,8 +129,13 @@ void StartDefaultTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(500);
-    DrvBaroReadTemp(&temp_num);
+    osDelay(10);
+    while(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_7)==1)
+    {
+        osDelay(1);
+    }   //wait until the interrupt pin asserts
+    DrvMaxFifoReadBytes(max_fifo_data);
+    //DrvBaroReadTemp(&temp_num);
   }
   /* USER CODE END StartDefaultTask */
 }

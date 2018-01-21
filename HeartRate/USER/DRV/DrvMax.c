@@ -77,6 +77,7 @@ u8 DrvBaroMaxReadData(BSP_I2C_MASTER_PORT_ENUM port, u8 reg, u8 *rxdata, u8 num)
 ******************************************************************************/
 u8 DrvBaroMaxInit(void)
 {
+  //最原始的说明书历程的
 //  if(DrvDrvMaxWriteCmd(BSP_I2C_COM_MAX, 0x09, 0x0b) == FALSE)
 //  {
 //    return FALSE;
@@ -110,7 +111,7 @@ u8 DrvBaroMaxInit(void)
 //    return FALSE;
 //  }
     
-    
+    //网上的历程的
     if(DrvDrvMaxWriteCmd(BSP_I2C_COM_MAX, REG_INTR_ENABLE_1, 0xc0) == FALSE)   // INTR setting1     add = 0x02
     {
       return FALSE;
@@ -160,6 +161,7 @@ u8 DrvBaroMaxInit(void)
     {
       return FALSE;
     }
+
   return TRUE;
 }
 
@@ -171,41 +173,37 @@ u8 DrvBaroMaxInit(void)
 * @返 回 值： 无
 * @备    注：
 ******************************************************************************/ 
-//void DrvBaroReset(BSP_I2C_MASTER_PORT_ENUM port)
-//{
-//	DrvBaroWriteCmd(port, DRV_MS5611_RESET);
-//}
+u8 DrvMaxReset(BSP_I2C_MASTER_PORT_ENUM port)
+{
+	if(DrvDrvMaxWriteCmd(BSP_I2C_COM_MAX, REG_MODE_CONFIG, 0x40) == FALSE)  //0x02 for Red only, 0x03 for SpO2 mode 0x07 multimode LED    add = 0x09   0x40 RESET
+  {
+      return FALSE;
+  }
+  if(DrvDrvMaxWriteCmd(BSP_I2C_COM_MAX, REG_MODE_CONFIG, 0x40) == FALSE)  //0x02 for Red only, 0x03 for SpO2 mode 0x07 multimode LED    add = 0x09   0x40 RESET
+  {
+      return FALSE;
+  }
+  return TRUE;
+}
 
 
 /******************************************************************************
-* @函 数 名： DrvPressureReadPerssure
+* @函 数 名： void DrvMaxFifoReadBytes(u8* Data)
 * @函数描述： 
 * @参    数： 
 * @返 回 值： 
 * @备    注：
 ******************************************************************************/
-//static u8 DrvBaroReadPerssure(BSP_I2C_MASTER_PORT_ENUM port, u32* Pressure)
-//{
-//  // D1
-//  u8 PressureTemp[3];
-//  if(DrvBaroWriteCmd(port,D1C4096) == FALSE)
-//  {
-//    //osDelay(10);
-//    return FALSE;
-//  }
-//  osDelay(10);
-//  
-//  // read ADC of D1
-//  if(BspI2CMasterMemRead(port, DRV_MS5611_ADDR, ADCREAD, MEM_ADD_SIZE_8BIT,PressureTemp, 3) == FALSE)
-//  {
-//    //osDelay(10);
-//    return FALSE;
-//  }
-//  
-//  *Pressure = (PressureTemp[0] << 16) | (PressureTemp[1] << 8) | PressureTemp[2];
-//  osDelay(10);
-//  return TRUE;
-//}
+void DrvMaxFifoReadBytes(u8* Data)
+{	
+  u8 status_data;
+  u8 FifoWrPtr;
+  
+  DrvBaroMaxReadData(BSP_I2C_COM_MAX, REG_INTR_STATUS_1, &status_data,1);
+  DrvBaroMaxReadData(BSP_I2C_COM_MAX, REG_INTR_STATUS_1, &status_data,1);
+	
+  DrvBaroMaxReadData(BSP_I2C_COM_MAX, REG_FIFO_DATA, Data,6);
+}
 
 
 /******************************************************************************
@@ -226,7 +224,7 @@ u8 DrvBaroReadTemp(u8* Temperature)
   {
     return FALSE;
   }
-//  if(DrvDrvMaxWriteCmd(BSP_I2C_COM_MAX, REG_TEMP_CONFIG, 0x01) == FALSE)
+//  if(DrvDrvMaxWriteCmd(BSP_I2C_COM_MAX, REG_TEMP_CONFIG, 0x01) == FALSE)   //不知道为什么分数读了就死了 待解决
 //  {
 //    return FALSE;
 //  }

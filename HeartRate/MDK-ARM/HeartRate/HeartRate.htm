@@ -3,11 +3,11 @@
 <title>Static Call Graph - [HeartRate\HeartRate.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image HeartRate\HeartRate.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060422: Last Updated: Thu Jan 18 23:02:07 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060422: Last Updated: Sun Jan 21 09:44:23 2018
 <BR><P>
-<H3>Maximum Stack Usage =        288 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        296 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-StartDefaultTask &rArr; DrvBaroReadTemp &rArr; DrvDrvMaxWriteCmd &rArr; SEGGER_RTT_printf &rArr; SEGGER_RTT_vprintf &rArr; _PrintInt &rArr; _PrintUnsigned &rArr; _StoreChar &rArr; SEGGER_RTT_Write
+StartDefaultTask &rArr; DrvMaxFifoReadBytes &rArr; DrvBaroMaxReadData &rArr; SEGGER_RTT_printf &rArr; SEGGER_RTT_vprintf &rArr; _PrintInt &rArr; _PrintUnsigned &rArr; _StoreChar &rArr; SEGGER_RTT_Write
 <P>
 <H3>
 Mutually Recursive functions
@@ -377,16 +377,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BspI2CMasterMemRead
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SEGGER_RTT_printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DrvBaroReadTemp
-</UL>
-
-<P><STRONG><a name="[58]"></a>DrvBaroReadTemp</STRONG> (Thumb, 38 bytes, Stack size 8 bytes, drvmax.o(i.DrvBaroReadTemp))
-<BR><BR>[Stack]<UL><LI>Max Depth = 288<LI>Call Chain = DrvBaroReadTemp &rArr; DrvDrvMaxWriteCmd &rArr; SEGGER_RTT_printf &rArr; SEGGER_RTT_vprintf &rArr; _PrintInt &rArr; _PrintUnsigned &rArr; _StoreChar &rArr; SEGGER_RTT_Write
-</UL>
-<BR>[Calls]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DrvDrvMaxWriteCmd
-<LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DrvBaroMaxReadData
-</UL>
-<BR>[Called By]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;StartDefaultTask
+<BR>[Called By]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DrvMaxFifoReadBytes
 </UL>
 
 <P><STRONG><a name="[55]"></a>DrvDrvMaxWriteCmd</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, drvmax.o(i.DrvDrvMaxWriteCmd))
@@ -395,8 +386,15 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BspI2CMasterMemWrite
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SEGGER_RTT_printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DrvBaroReadTemp
-<LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DrvBaroMaxInit
+<BR>[Called By]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DrvBaroMaxInit
+</UL>
+
+<P><STRONG><a name="[58]"></a>DrvMaxFifoReadBytes</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, drvmax.o(i.DrvMaxFifoReadBytes))
+<BR><BR>[Stack]<UL><LI>Max Depth = 296<LI>Call Chain = DrvMaxFifoReadBytes &rArr; DrvBaroMaxReadData &rArr; SEGGER_RTT_printf &rArr; SEGGER_RTT_vprintf &rArr; _PrintInt &rArr; _PrintUnsigned &rArr; _StoreChar &rArr; SEGGER_RTT_Write
+</UL>
+<BR>[Calls]<UL><LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DrvBaroMaxReadData
+</UL>
+<BR>[Called By]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;StartDefaultTask
 </UL>
 
 <P><STRONG><a name="[59]"></a>Error_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, main.o(i.Error_Handler))
@@ -423,7 +421,8 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[53]"></a>HAL_GPIO_ReadPin</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f1xx_hal_gpio.o(i.HAL_GPIO_ReadPin))
-<BR><BR>[Called By]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BspI2CMasterSDARead
+<BR><BR>[Called By]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;StartDefaultTask
+<LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BspI2CMasterSDARead
 </UL>
 
 <P><STRONG><a name="[6b]"></a>HAL_GPIO_WritePin</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f1xx_hal_gpio.o(i.HAL_GPIO_WritePin))
@@ -579,7 +578,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[6f]"></a>MX_GPIO_Init</STRONG> (Thumb, 274 bytes, Stack size 56 bytes, gpio.o(i.MX_GPIO_Init))
+<P><STRONG><a name="[6f]"></a>MX_GPIO_Init</STRONG> (Thumb, 272 bytes, Stack size 56 bytes, gpio.o(i.MX_GPIO_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = MX_GPIO_Init &rArr; HAL_GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
@@ -667,11 +666,12 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SEGGER_RTT_printf
 </UL>
 
-<P><STRONG><a name="[3a]"></a>StartDefaultTask</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, freertos.o(i.StartDefaultTask))
-<BR><BR>[Stack]<UL><LI>Max Depth = 288<LI>Call Chain = StartDefaultTask &rArr; DrvBaroReadTemp &rArr; DrvDrvMaxWriteCmd &rArr; SEGGER_RTT_printf &rArr; SEGGER_RTT_vprintf &rArr; _PrintInt &rArr; _PrintUnsigned &rArr; _StoreChar &rArr; SEGGER_RTT_Write
+<P><STRONG><a name="[3a]"></a>StartDefaultTask</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, freertos.o(i.StartDefaultTask))
+<BR><BR>[Stack]<UL><LI>Max Depth = 296<LI>Call Chain = StartDefaultTask &rArr; DrvMaxFifoReadBytes &rArr; DrvBaroMaxReadData &rArr; SEGGER_RTT_printf &rArr; SEGGER_RTT_vprintf &rArr; _PrintInt &rArr; _PrintUnsigned &rArr; _StoreChar &rArr; SEGGER_RTT_Write
 </UL>
-<BR>[Calls]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
-<LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DrvBaroReadTemp
+<BR>[Calls]<UL><LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
+<LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
+<LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DrvMaxFifoReadBytes
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> freertos.o(.constdata)
 </UL>

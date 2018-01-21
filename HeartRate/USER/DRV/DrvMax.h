@@ -76,6 +76,7 @@ extern u8 DrvBaroMaxInit(void);
 extern u8 DrvBaroMaxReadData(BSP_I2C_MASTER_PORT_ENUM port, u8 reg, u8 *rxdata, u8 num);
 extern u8 DrvDrvMaxWriteCmd(BSP_I2C_MASTER_PORT_ENUM port, u8 reg, u8 data);
 extern u8 DrvBaroReadTemp(u8* Temperature);
+extern void DrvMaxFifoReadBytes(u8* Data);
 
 
 #ifdef __cplusplus
