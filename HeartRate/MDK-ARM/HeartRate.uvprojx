@@ -593,6 +593,13 @@
         </Group>
         <Group>
           <GroupName>APP</GroupName>
+          <Files>
+            <File>
+              <FileName>AppHeartRate.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\APP\AppHeartRate.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>CMSIS_OS_USER</GroupName>

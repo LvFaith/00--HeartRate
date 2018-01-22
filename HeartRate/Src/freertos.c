@@ -70,12 +70,16 @@ void ProcessKeyTask(void const * argument);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /* USER CODE BEGIN FunctionPrototypes */
-
+u8 temp_num = 0;
+u8 max_fifo_data[6] = {0};
+uint32_t max_red;
+uint32_t max_ir;
+u8 max_wr_ptr;
+u8 max_rd_ptr;
 /* USER CODE END FunctionPrototypes */
 
 /* Hook prototypes */
-u8 temp_num = 0;
-u8 max_fifo_data[6] = {0};
+
 /* Init FreeRTOS */
 
 void MX_FREERTOS_Init(void) {
@@ -105,7 +109,7 @@ void MX_FREERTOS_Init(void) {
   NameLedAndTestHandle = osThreadCreate(osThread(NameLedAndTest), NULL);
 
   /* definition and creation of NameProcessMax */
-  osThreadDef(NameProcessMax, ProcessMaxTask, osPriorityNormal, 0, 128);
+  osThreadDef(NameProcessMax, ProcessMaxTask, osPriorityRealtime, 0, 128);
   NameProcessMaxHandle = osThreadCreate(osThread(NameProcessMax), NULL);
 
   /* definition and creation of NameProcessKey */
@@ -126,16 +130,26 @@ void StartDefaultTask(void const * argument)
 {
 
   /* USER CODE BEGIN StartDefaultTask */
+  u8 temp[6];
   /* Infinite loop */
   for(;;)
   {
-    osDelay(10);
-    while(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_7)==1)
-    {
-        osDelay(1);
-    }   //wait until the interrupt pin asserts
-    DrvMaxFifoReadBytes(max_fifo_data);
-    //DrvBaroReadTemp(&temp_num);
+    
+//      Test Read Fifo code£º         
+//            while(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_7)==1)
+//            {
+//                osDelay(1);
+//            } 
+//            DrvBaroMaxReadData(BSP_I2C_COM_MAX, REG_FIFO_WR_PTR, &max_wr_ptr,1);
+//            DrvBaroMaxReadData(BSP_I2C_COM_MAX, REG_FIFO_RD_PTR, &max_rd_ptr,1);
+//            DrvMaxFifoReadBytes(temp);
+//            max_red =  (uint32_t)((uint32_t)((uint32_t)temp[0]&0x03)<<16) | (uint32_t)temp[1]<<8 | (uint32_t)temp[2];    // Combine values to get the actual number
+//            max_ir = (uint32_t)((uint32_t)((uint32_t)temp[3] & 0x03)<<16) |(uint32_t)temp[4]<<8 | (uint32_t)temp[5];   // Combine values to get the actual number
+//            
+//            SEGGER_RTT_printf(0,"%d        %d        wr=%d    rd=%d\n",max_red,max_ir,max_wr_ptr,max_rd_ptr);
+//            osDelay(1);
+    
+    osDelay(500);
   }
   /* USER CODE END StartDefaultTask */
 }
