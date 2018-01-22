@@ -130,7 +130,7 @@ void StartDefaultTask(void const * argument)
 {
 
   /* USER CODE BEGIN StartDefaultTask */
-  u8 temp[6];
+//  u8 temp[6];
   /* Infinite loop */
   for(;;)
   {

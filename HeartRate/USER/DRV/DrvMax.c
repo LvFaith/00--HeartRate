@@ -195,9 +195,7 @@ u8 DrvMaxReset(BSP_I2C_MASTER_PORT_ENUM port)
 ******************************************************************************/
 void DrvMaxFifoReadBytes(u8* Data)
 {	
-  u8 i = 0;
   u8 status_data;
-  u8 FifoWrPtr;
   
   DrvBaroMaxReadData(BSP_I2C_COM_MAX, REG_INTR_STATUS_1, &status_data,1);   //«Â÷–∂œ
   DrvBaroMaxReadData(BSP_I2C_COM_MAX, REG_INTR_STATUS_2, &status_data,1);
