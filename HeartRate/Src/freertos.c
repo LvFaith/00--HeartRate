@@ -49,6 +49,7 @@
 /* USER CODE BEGIN Includes */     
 #include "gpio.h"  
 #include "DrvMax.h"
+#include "DrvLcd.h"
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/

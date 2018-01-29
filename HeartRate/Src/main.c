@@ -52,6 +52,7 @@
 /* USER CODE BEGIN Includes */
 #include "BspI2CSoftDriver.h"
 #include "DrvMax.h"
+#include "DrvLcd.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -76,6 +77,7 @@ static void UserInit(void)
 {
 	BspI2CMasterInit();
   DrvBaroMaxInit();
+  DrvLcdInit();
 }
 /* USER CODE END 0 */
 
