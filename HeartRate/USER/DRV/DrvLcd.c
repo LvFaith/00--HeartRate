@@ -9,93 +9,10 @@
 ******************************************************************************/
 #include "DrvLcd.h"
 #include <stdio.h>
-#include "FONT.h"
+#include "8x16.h"
 #include "GB1616.h"	//16*16汉字字模
-//#include "sheep.h"
 #include "spi.h"
-/*
- * 函数名：LCD_GPIO_Config
- * 描述  ：根据FSMC配置LCD的I/O
- * 输入  ：无
- * 输出  ：无
- * 调用  ：内部调用        
- */
-// void LCD_GPIO_Config(void)
-//{
-//    GPIO_InitTypeDef GPIO_InitStructure;
-//    
-//    /* Enable the FSMC Clock */
-//    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC, ENABLE);
-//    
-//    /* config lcd gpio clock base on FSMC */
-//    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD | RCC_APB2Periph_GPIOE , ENABLE);
-//    
-//    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-//    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//    
-//    /* config tft back_light gpio base on the PT4101 */
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;		
-//    GPIO_Init(GPIOD, &GPIO_InitStructure);
-//    
-//    /* config tft rst gpio */
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_13 ; 	 
-//    GPIO_Init(GPIOC, &GPIO_InitStructure);  		   
-//    
-//    /* config tft data lines base on FSMC
-//	 * data lines,FSMC-D0~D15: PD 14 15 0 1,PE 7 8 9 10 11 12 13 14 15,PD 8 9 10
-//	 */	
-//    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-//    
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_8 | GPIO_Pin_9 | 
-//                                  GPIO_Pin_10 | GPIO_Pin_14 | GPIO_Pin_15;
-//    GPIO_Init(GPIOD, &GPIO_InitStructure);
-//    
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10 | 
-//                                  GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | 
-//                                  GPIO_Pin_15;
-//    GPIO_Init(GPIOE, &GPIO_InitStructure); 
-//    
-//    /* config tft control lines base on FSMC
-//	 * PD4-FSMC_NOE  :LCD-RD
-//   * PD5-FSMC_NWE  :LCD-WR
-//	 * PD7-FSMC_NE1  :LCD-CS
-//   * PD11-FSMC_A16 :LCD-DC
-//	 */
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4; 
-//    GPIO_Init(GPIOD, &GPIO_InitStructure);
-//    
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5; 
-//    GPIO_Init(GPIOD, &GPIO_InitStructure);
-//    
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7; 
-//    GPIO_Init(GPIOD, &GPIO_InitStructure);  
-//    
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 ; 
-//    GPIO_Init(GPIOD, &GPIO_InitStructure);  
-//    
-//    /* tft control gpio init */	 
-//    GPIO_SetBits(GPIOD, GPIO_Pin_13);		 // RST = 1 	
-//    GPIO_SetBits(GPIOC, GPIO_Pin_5);	 	 //	LIGHT
-//    GPIO_SetBits(GPIOD, GPIO_Pin_4);		 // RD = 1  
-//    GPIO_SetBits(GPIOD, GPIO_Pin_5);		 // WR = 1 
-//    GPIO_SetBits(GPIOD, GPIO_Pin_7);		 //	CS = 1 
-//		
-//																	//   BL      　　RS      CS
-//  GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4;	
-//  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;       
-//  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//  GPIO_Init(GPIOA, &GPIO_InitStructure);
-//	GPIO_ResetBits(GPIOA, GPIO_Pin_4);
 
-//	GPIO_SetBits(GPIOC, GPIO_Pin_13);	 	 //	CS2
-//	
-//	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_7 | GPIO_Pin_5|GPIO_Pin_11;	
-//  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;       
-//  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//  GPIO_Init(GPIOD, &GPIO_InitStructure);
-//	GPIO_ResetBits(GPIOD, GPIO_Pin_7);
-//}
 
 static void Delay(__IO u32 nCount)
 {	
@@ -120,17 +37,29 @@ void WriteData(u8 tem_data)
 //  HAL_SPI_Transmit_DMA(&hspi2, (u8*)&tem_data, 1);
   HAL_SPI_TransmitReceive_DMA(&hspi2, &tem_data, &rx_data_buf, 1);
 }
+void Write_Data_U16(unsigned int Color_U16)
+{
+  WriteData(Color_U16>>8);
+	WriteData(Color_U16);
+}
 
-//void WriteComm(u16 CMD)
-//{			
-//	LCD_RS(0);
-//  hspi2.Instance->DR = CMD;
-//}
-//void WriteData(u16 tem_data)
-//{			
-//	LCD_RS(1);
-//  hspi2.Instance->DR = tem_data;
-//}
+void BlockWrite_V(unsigned int Xstart,unsigned int Xend,unsigned int Ystart,unsigned int Yend) 
+{
+	//HX8357-C
+	 WriteComm(0x2A);
+   WriteData(Xstart>>8);
+   WriteData(Xstart);
+   WriteData(Xend>>8);
+   WriteData(Xend);
+  
+   WriteComm(0x2B);
+   WriteData(Ystart>>8);
+   WriteData(Ystart);
+   WriteData(Yend>>8);
+	 WriteData(Yend);
+	 
+	 WriteComm(0x2C);
+}
 
 /**********************************************
 Lcd初始化函数
@@ -139,18 +68,11 @@ Initial condition  (DB0-15,RS,CSB,WRD,RDB,RESETB="L")
 u8 lcd_data_receive[10];
 void DrvLcdInit(void)
 {	
-	int a,i;
-  
-// LCD_FSMC_Config();
-// LCD_Rst();
-  
 #if 1
 SPI_CS(1);
-// 
-	
-		////////////////////HX8357C+TM3.2////////////
+////////////////////HX8357C+TM3.2////////////
 WriteComm(0x0001);
-Delay(100);
+Delay(20);
 SPI_CS(0);
 WriteComm(0x0011);
 Delay(20);
@@ -220,21 +142,9 @@ WriteComm(0x29); // Display on
 
 Delay(10);
 
-
 WriteComm(0x36); //Set_address_mode
 WriteData(0x68); //横屏，从左下角开始，从左到右，从下到上
 #endif
-
-#if 0
-SPI_CS(1);
-
-WriteComm(0x01);
-Delay(100);
-SPI_CS(0);
-
-WriteComm(0x11); 	//t ver address
-Delay(20);	
-
 
 //LQH TEST
 //u8 reg_test = 0x0C;
@@ -242,152 +152,71 @@ Delay(20);
 //HAL_SPI_TransmitReceive_DMA(&hspi2, &reg_test, lcd_data_receive, 2);
 //Delay(10);
 
-WriteComm(0xc0); 	
-WriteData(0x0A); // VRH1 01~1F
-WriteData(0x0A); // VRH2 01~1F
-
-WriteComm(0xC1); 	//BT AND VC	
-WriteData(0x41);
-WriteData(0x07);
-
-WriteComm(0xC5); 	//VCM
-WriteData(0x00);
-WriteData(0x42);	   //3D
-WriteData(0x80);
-
-WriteComm(0xC2); 	//DC1,DC0	
-WriteData(0x33);
-
-WriteComm(0x35); 	//TE 	
-WriteData(0x00);
-
-WriteComm(0xB1); // frmae rate	
-WriteData(0xB0);    // 70hz // c0 81hz // d0 96hz
-WriteData(0x11);
-
-WriteComm(0xB4); // display inversion
-WriteData(0x02);  // 0 column 1 1dot  2 2dot
-
-WriteComm(0xB6); 	//t ver address	
-WriteData(0x00);
-WriteData(0x00);//02  GS SS SM
-WriteData(0x3B);
-
-WriteComm(0xB7); 	//t ver address	
-WriteData(0x07);
-
-WriteComm(0xF0); 	//Enter ENG	
-WriteData(0x36);
-WriteData(0xA5);
-WriteData(0xD3);
-
-WriteComm(0xE5); 	//Open gamma function	
-WriteData(0x80);
-
-WriteComm(0xF0); 	//	Exit ENG	
-WriteData(0x36);
-WriteData(0xA5);
-WriteData(0x53);
-
-WriteComm(0xE0); 	//Gamma setting	
-WriteData(0x00);
-WriteData(0x35);
-WriteData(0x33);
-WriteData(0x00);
-WriteData(0x00);
-WriteData(0x00);
-WriteData(0x00);
-WriteData(0x35);
-WriteData(0x33);
-WriteData(0x00);
-WriteData(0x00);
-WriteData(0x00);
-
-WriteComm(0x3a); 	//t ver address	
-WriteData(0x55);//
-
-WriteComm(0x29); 	//t ver address
-Delay(10);
-
-WriteComm(0x36); //Set_address_mode
-WriteData(0x68); //横屏，从左下角开始，从左到右，从下到上
-#endif
-
-
-
-////Lcd_Light_ON;//背景灯光没有分配IO********************************************************************************************************************************
-
-// while(1)
-//{
 WriteComm(0x36);//竖屏
 WriteData(0x48);//
-
-//test_color();
-
-BlockWrite(0,319,0,479);
-for(i=0;i<320*480;i++)
-{
-	LCD_RS(1);
-	WriteData(BLUE>>8);
-	LCD_RS(1);
-	WriteData(BLUE);
-}
+InitLcdPic();     //刷屏初始化原始界面
+      
 WriteComm(0x36); //Set_address_mode
-WriteData(0x68); //横屏，从左下角开始，从左到右，从下到上
-LCD_PutString(10, 10, "支持竖屏jfkalgjlasghkjlagjkaslhuig", BRED, BLACK,1); 
+WriteData(0x6A); //横屏，从左下角开始，从左到右，从下到上
+
+LCD_PutString(10, 13, "测量者编号:", FONT_SURFACE_COLOR, FONT_BKG_COLOR,1);
+print_num(90,13,01);
+LCD_PutString(157, 13, "心率:", FONT_SURFACE_COLOR, FONT_BKG_COLOR,1);
+print_num(190,13,0);
+LCD_PutString(255, 13, "血氧浓度:", FONT_SURFACE_COLOR, FONT_BKG_COLOR,1);
+print_num(318,13,0);
+LCD_PutString(380, 13, "保存状态:否", FONT_SURFACE_COLOR, FONT_BKG_COLOR,1);
+
+Line(0,39,479,39,LINE_COLOR);   //第一行的线
+Line(0,40,479,40,LINE_COLOR);
+
+Line(0,180,479,180,LINE_COLOR);  //中间的线
+Line(0,179,479,179,LINE_COLOR);  
+
+Line(39,39,39,319,LINE_COLOR);   //竖线
+Line(40,39,40,319,LINE_COLOR);
+
+LCD_PutString(10, 80, "心", FONT_SURFACE_COLOR, FONT_BKG_COLOR,1);//竖向的字
+LCD_PutString(10, 110, "率", FONT_SURFACE_COLOR, FONT_BKG_COLOR,1);
+LCD_PutString(10, 220, "血", FONT_SURFACE_COLOR, FONT_BKG_COLOR,1);
+LCD_PutString(10, 250, "氧", FONT_SURFACE_COLOR, FONT_BKG_COLOR,1);
 
 }
 
-void test_color(void)
+void InitLcdPic(void)
 {
-	unsigned short i,j;
-	BlockWrite(0,319,0,479);
-	for(i=0;i<480;i++)
-	{	for(j=0;j<320;j++)
+	int a,i,j;
+  
+  BlockWrite_V(0,319,0,479);
+  for(i=0;i<480;i++)
+  {	
+    for(j=0;j<320;j++)
 		{
 			if(j<40)
 			{
-				WriteData(BLACK>>8);
-				WriteData(BLACK); 
+				WriteData(WHITE>>8);
+				WriteData(WHITE); 
 			}
-			else if(j<80)
-			{
-				WriteData(BLUE>>8);
-				WriteData(BLUE);
-			}
-			else if(j<120)
-			{
-				WriteData(BRED>>8);
-				WriteData(BRED);
-			}
-			else if(j<160)
-			{
-				WriteData(GRED>>8);
-				WriteData(GRED);
-			}
-			else if(j<200)
-			{
-				WriteData(RED>>8);
-				WriteData(RED);
-			}
-			else if(j<240)
-			{
-				WriteData(GREEN>>8);
-				WriteData(GREEN);
-			}
-			else if(j<280)
-			{
-				WriteData(YELLOW>>8);
-				WriteData(YELLOW);
-			}
-			else if(j<320)
-			{
-				WriteData(BROWN>>8);
-				WriteData(BROWN);
-			}
-		}
-	}
+      else
+      {
+        if(i>440)
+        {
+            WriteData(WHITE>>8);
+            WriteData(WHITE); 
+        }
+        else
+        {
+            WriteData(GRAY>>8);
+            WriteData(GRAY); 
+        }
+      }
+      
+        
+    }
+  }
 }
+
+
 
 /**********************************************
 函数名：Lcd块选函数
@@ -404,6 +233,12 @@ void test_color(void)
 void BlockWrite(unsigned int Xstart,unsigned int Xend,unsigned int Ystart,unsigned int Yend) 
 {
 	//HX8357-C
+   
+   Xstart = 479 - Xstart;
+   Xend = 479 - Xend;
+  
+   Ystart = 319 - Ystart;
+   Yend = 319 -Yend;
 	
 	 WriteComm(0x2A);
    WriteData(Xstart>>8);
@@ -464,25 +299,34 @@ void LCD_Fill_Pic(u16 x, u16 y,u16 pic_H, u16 pic_V, const unsigned char* pic)
 	LCD_RS(1);	
 	WriteData(pic[i]);
 	}
-// 	WriteComm(0x36); //Set_address_mode
-// 	WriteData(0xaa);
 }
 
 void DrawPixel(u16 x, u16 y, u16 Color)
 {
 	BlockWrite(x,x,y,y);
-// 	WriteComm(0x200);   
-// 	WriteData(x);
-// 	WriteComm(0x201);   
-// 	WriteData(y);
-// 	WriteComm(0x202);
 	WriteData(Color>>8);
 	WriteData(Color);
-// 	*(__IO u16 *) (Bank1_LCD_D) = Color;
 }
+
+
+void LCD_Fill_Block(unsigned int X0,unsigned int Y0,unsigned int X1,unsigned int Y1,unsigned int color)
+{
+	unsigned short i,j;
+  if(X0 >479 || Y0>319 || X1 >479 || Y1>319)
+    return;
+//	BlockWrite(0,479,0,319);
+	for(i=0;i<X1-X0;i++)
+	{	for(j=0;j<Y1-Y0;j++)
+		{
+				DrawPixel(X0+i,Y0+j,color);
+    }
+  }
+}
+
 
 void PutGB1616(unsigned short x, unsigned short  y, unsigned char c[2], unsigned int fColor,unsigned int bColor,unsigned char flag)
 {
+  BlockWrite(x,x+15,y,y+15);
 	unsigned char i,j,k,m;
 	for (k=0;k<64;k++) { //64标示自建汉字库中的个数，循环查询内码
 	  if ((codeGB_16[k].Index[0]==c[0])&&(codeGB_16[k].Index[1]==c[1]))
@@ -494,6 +338,7 @@ void PutGB1616(unsigned short x, unsigned short  y, unsigned char c[2], unsigned
 				{		
 					if((m&0x80)==0x80) {
 						DrawPixel(x+j,y,fColor);
+      //      Write_Data_U16(fColor);
 						}
 					else {
 						if(flag) DrawPixel(x+j,y,bColor);
@@ -505,25 +350,142 @@ void PutGB1616(unsigned short x, unsigned short  y, unsigned char c[2], unsigned
 		  }
 		}  
 	  }	
-	}
-void LCD_PutString(unsigned short x, unsigned short y, unsigned char *s, unsigned int fColor, unsigned int bColor,unsigned char flag) 
+}
+void LCD_PutChar8x16(unsigned short x, unsigned short y, char c, unsigned int fColor, unsigned int bColor)
+{
+	unsigned char i,j;
+	BlockWrite(x,x+7,y,y+15);
+	for (i=0;i<16;i++)
 	{
-	 unsigned char l=0;
-	while(*s) {
-		PutGB1616(x+l*8,y,(unsigned char*)s,fColor,bColor,flag);
-		s+=2;l+=2;
-// 		if( *s < 0x80) 
-// 		    {
-// 			LCD_PutChar(x+l*8,y,*s,fColor,bColor,flag);
-// 			s++;l++;
-// 			}
-// 		else
-// 		    {
-// 			PutGB1616(x+l*8,y,(unsigned char*)s,fColor,bColor,flag);
-// 			s+=2;l+=2;
-// 			}
-		}
+      unsigned char m=Font8x16[c*16+i];
+      for (j=0;j<8;j++)
+      {
+        if((m&0x80)==0x80)
+        {
+          DrawPixel(x+j,y,fColor);
+        }
+        else 
+        {	
+          DrawPixel(x+j,y,bColor);
+        }
+        m<<=1;
+      }	
+      y++;		
 	}
+}
+void LCD_PutString(unsigned short x, unsigned short y, unsigned char *s, unsigned int fColor, unsigned int bColor,unsigned char flag) 
+{
+    unsigned char l=0;
+    while(*s) 
+    {
+        if( *s < 0x80) 
+        {
+          LCD_PutChar8x16(x+l*8,y,*s,fColor,bColor);
+          s++;l++;
+        }
+        else
+        {
+          PutGB1616(x+l*8,y,(unsigned char*)s,fColor,bColor,flag);
+          s+=2;l+=2;
+        }
+		}
+}
+
+void Line(unsigned int X0,unsigned int Y0,unsigned int X1,unsigned int Y1,unsigned int color)
+{
+	int dx = X1 - X0;
+	int dy = Y1 - Y0;
+	//int P  = 2 * dy - dx;
+	//int dobDy = 2 * dy;
+	//int dobD = 2 * (dy - dx);
+	int PointX = 0,PointY = 0;
+	int incx = 0,incy = 0;
+	int distance = 0,xerr = 0,yerr = 0;
+	unsigned int i = 0;
+	if(dx == 0)
+	{
+		PointX = X0;
+		if(Y0 < Y1)
+		{
+			PointY = Y0;
+		}
+		else{
+			PointY = Y1;
+		}
+		for(i = 0;i <= ((Y0<Y1) ? (Y1-Y0) : (Y0-Y1));i++)
+		{
+			DrawPixel(PointX,PointY,color);
+			PointY++;
+		}
+		return;
+	}
+	if(dy == 0)	
+	{
+		PointY = Y0;
+		if(X0 < X1)
+		{
+			PointX = X0;
+		}
+		else{
+			PointX = X1;
+		}
+		for(i = 0;i <= ((X0<X1) ? (X1-X0) : (X0-X1));i++)
+		{
+			DrawPixel(PointX,PointY,color);
+			PointX++;
+		}
+		return;
+	}
+
+	if(dx > 0)
+		incx = 1;
+	else if(dx == 0)
+		incx = 0;
+	else
+		incx = -1;
+
+	if(dy > 0)
+		incy = 1;
+	else if(dy == 0)
+		incy = 0;
+	else
+		incy = -1;
+
+    dx = ((X0>X1) ? (X0-X1) : (X1-X0));
+    dy = ((Y0>Y1) ? (Y0-Y1) : (Y1-Y0));
+
+    if(dx>dy) distance=dx;
+    else distance=dy;
+
+    PointX = X0;
+    PointY = Y0;
+    for(i=0;i<=distance+1;i++){
+    	DrawPixel(PointX,PointY,color);
+        xerr+=dx;
+        yerr+=dy;
+        if(xerr>distance){
+            xerr-=distance;
+            PointX+=incx;
+        }
+        if(yerr>distance){
+            yerr-=distance;
+            PointY+=incy;
+        }
+    }
+}
+
+
+void print_num(u16 x,u16 y,u16 num)
+{
+	LCD_PutChar8x16(x+8,y,num%1000/100+48,Black,White);
+	LCD_PutChar8x16(x+16,y,num%100/10+48,Black,White);
+	LCD_PutChar8x16(x+24,y,num%10+48,Black,White);
+}
+  
+  
+  
+  
+
 typedef __packed struct
 {
 	u8  pic_head[2];				//1
@@ -564,6 +526,7 @@ typedef __packed struct
 }BMP_HEAD;
 
 BMP_HEAD bmp;
+
 
  
 #if 0

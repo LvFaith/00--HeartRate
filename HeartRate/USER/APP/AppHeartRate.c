@@ -1,7 +1,7 @@
 #include <math.h>
 #include "AppHeartRate.h"
 #include "DrvMax.h"
-
+#include "DrvLcd.h"
 
 
 
@@ -13,7 +13,7 @@ int8_t ch_spo2_valid;   //indicator to show if the SP02 calculation is valid
 int32_t n_heart_rate;   //heart rate value
 int8_t  ch_hr_valid;    //indicator to show if the heart rate calculation is valid
 uint8_t uch_dummy;
-u8 dis_hr=0,dis_spo2=0;
+u8 dis_hr=0,dis_spo2=0,dis_data_ready = 0;
 
 #define MAX_BRIGHTNESS 255
 
@@ -110,7 +110,7 @@ void ProcessMaxTask(void const * argument)
                     n_brightness=MAX_BRIGHTNESS;
             }
             //send samples and calculation result to terminal program through UART
-            if(ch_hr_valid == 1 && ch_spo2_valid ==1 && n_heart_rate<140 && n_sp02<101)     //发送显示
+            if(ch_hr_valid == 1 && ch_spo2_valid ==1 && n_heart_rate<120 && n_sp02<101)     //发送显示
             {
               //				printf("HR=%i, ", n_heart_rate); 
               //				printf("HRvalid=%i, ", ch_hr_valid);
@@ -118,7 +118,7 @@ void ProcessMaxTask(void const * argument)
               //				printf("SPO2Valid=%i\r\n", ch_spo2_valid);
               dis_hr = n_heart_rate;
               dis_spo2 = n_sp02;
-              
+              dis_data_ready = 1;
               SEGGER_RTT_printf(0,"HR = %d      SP02 = %d       red=%d       ir=%d\n",dis_hr,dis_spo2,aun_red_buffer[i],aun_ir_buffer[i]);
             }
             else

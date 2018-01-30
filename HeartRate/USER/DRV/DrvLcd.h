@@ -59,6 +59,10 @@ void BlockWrite(unsigned int Xstart,unsigned int Xend,unsigned int Ystart,unsign
 char Tiky_Button(char *filename,u16 x,u16 y);
 char display_picture(char *filename);
 void test_color(void);
+void print_num(u16 x,u16 y,u16 num);
+void Line(unsigned int X0,unsigned int Y0,unsigned int X1,unsigned int Y1,unsigned int color);
+void LCD_Fill_Block(unsigned int X0,unsigned int Y0,unsigned int X1,unsigned int Y1,unsigned int color);
+void InitLcdPic(void);
 /*定义常见颜色*/
 // #define red 0x001f
 // #define blue 0xf800
@@ -94,3 +98,7 @@ void test_color(void);
 #define BROWN						0XBC40 //棕色
 #define BRRED						0XFC07 //棕红色
 #define GRAY						0X8430 //灰色
+
+#define LINE_COLOR						RED //线的颜色
+#define FONT_SURFACE_COLOR            BLACK
+#define FONT_BKG_COLOR            WHITE

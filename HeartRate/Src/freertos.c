@@ -77,6 +77,8 @@ uint32_t max_red;
 uint32_t max_ir;
 u8 max_wr_ptr;
 u8 max_rd_ptr;
+extern u8 dis_hr,dis_spo2,dis_data_ready;
+u8 last_dis_hr = 0, last_dis_spo2 = 0;
 /* USER CODE END FunctionPrototypes */
 
 /* Hook prototypes */
@@ -110,7 +112,7 @@ void MX_FREERTOS_Init(void) {
   NameLedAndTestHandle = osThreadCreate(osThread(NameLedAndTest), NULL);
 
   /* definition and creation of NameProcessMax */
-  osThreadDef(NameProcessMax, ProcessMaxTask, osPriorityRealtime, 0, 128);
+  osThreadDef(NameProcessMax, ProcessMaxTask, osPriorityRealtime, 0, 256);
   NameProcessMaxHandle = osThreadCreate(osThread(NameProcessMax), NULL);
 
   /* definition and creation of NameProcessKey */
@@ -132,25 +134,39 @@ void StartDefaultTask(void const * argument)
 
   /* USER CODE BEGIN StartDefaultTask */
 //  u8 temp[6];
+  u8 num = 0;
+  u16 hr_x = 40;
+  u16 dis_spo2_x = 40;
   /* Infinite loop */
   for(;;)
   {
-    
-//      Test Read Fifo code：         
-//            while(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_7)==1)
-//            {
-//                osDelay(1);
-//            } 
-//            DrvBaroMaxReadData(BSP_I2C_COM_MAX, REG_FIFO_WR_PTR, &max_wr_ptr,1);
-//            DrvBaroMaxReadData(BSP_I2C_COM_MAX, REG_FIFO_RD_PTR, &max_rd_ptr,1);
-//            DrvMaxFifoReadBytes(temp);
-//            max_red =  (uint32_t)((uint32_t)((uint32_t)temp[0]&0x03)<<16) | (uint32_t)temp[1]<<8 | (uint32_t)temp[2];    // Combine values to get the actual number
-//            max_ir = (uint32_t)((uint32_t)((uint32_t)temp[3] & 0x03)<<16) |(uint32_t)temp[4]<<8 | (uint32_t)temp[5];   // Combine values to get the actual number
-//            
-//            SEGGER_RTT_printf(0,"%d        %d        wr=%d    rd=%d\n",max_red,max_ir,max_wr_ptr,max_rd_ptr);
-//            osDelay(1);
-    
-    osDelay(500);
+    if(dis_hr>50 && dis_spo2!=0 && dis_data_ready == 1)
+    {
+      dis_data_ready = 0;
+      print_num(190,13,dis_hr);//显示心率
+      print_num(318,13,dis_spo2); //显示血氧浓度
+      
+      if(dis_hr>50)
+      Line(hr_x,178-last_dis_hr,hr_x+3,179-dis_hr,BLUE);   //显示心率曲线  
+      hr_x = hr_x+2;
+      
+      if(hr_x>479)   //循环显示
+        hr_x = 40;     
+      if(dis_hr>50)
+      last_dis_hr = dis_hr;
+      
+      
+      if(dis_spo2>0)
+      Line(dis_spo2_x,319-last_dis_spo2,dis_spo2_x+3,319-dis_spo2,BLUE);     //显示血氧曲线
+      dis_spo2_x = dis_spo2_x+2;
+      
+      if(dis_spo2_x>479)
+        dis_spo2_x = 40;
+      
+      if(dis_spo2>30)
+      last_dis_spo2 = dis_spo2;
+    }
+    osDelay(5);
   }
   /* USER CODE END StartDefaultTask */
 }
@@ -162,12 +178,8 @@ __weak void LedAndTestTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+    HAL_GPIO_TogglePin(LED_GPIO_Port,LED_Pin);
     osDelay(500);
-    HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
-    osDelay(500);
-    HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
-
- //   HAL_GPIO_TogglePin(LED_GPIO_Port,LED_Pin);
   }
   /* USER CODE END LedAndTestTask */
 }
