@@ -130,6 +130,7 @@ void MX_FREERTOS_Init(void) {
 }
 extern uint32_t aun_ir_buffer[500]; //IR LED sensor data
 extern uint32_t aun_red_buffer[500];    //Red LED sensor data
+u32 last_dis_ir_buf = 0;
 
 void dis_DrawCurve(u32* data,u8 x)
 {
@@ -159,7 +160,11 @@ void dis_DrawCurve(u32* data,u8 x)
 		temp/=compress;
 		if(temp>138)temp=138;
     
-    DrawPixel(i+41,319-x-temp,BLUE);
+//    DrawPixel(i+41,319-x-temp,BLUE);
+    
+    Line(i+41,319-x-last_dis_ir_buf,i+42,319-x-temp,BLUE);   //显示心率曲线  
+    
+    last_dis_ir_buf = temp;
    
 //		OLED_DrawPoint(i,63-x-temp,1);
 	}
@@ -216,7 +221,7 @@ void StartDefaultTask(void const * argument)
       dis_delay ++;
     
     
-    if(dis_delay>3)
+    if(dis_delay>10)
     {
       clean_dis_curve();
       is_dis_flag = 0;
