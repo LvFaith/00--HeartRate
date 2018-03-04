@@ -140,24 +140,24 @@ void StartDefaultTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    if(dis_hr>50 && dis_spo2!=0 && dis_data_ready == 1)
+    if(dis_hr>10 && dis_spo2!=0 && dis_data_ready == 1)
     {
       dis_data_ready = 0;
       print_num(190,13,dis_hr);//显示心率
       print_num(318,13,dis_spo2); //显示血氧浓度
       
-      if(dis_hr>50)
-      Line(hr_x,178-last_dis_hr,hr_x+3,179-dis_hr,BLUE);   //显示心率曲线  
+      if(dis_hr>10)
+      Line(hr_x,178-last_dis_hr,hr_x+2,178-dis_hr,BLUE);   //显示心率曲线  
       hr_x = hr_x+2;
       
       if(hr_x>479)   //循环显示
         hr_x = 40;     
-      if(dis_hr>50)
+      if(dis_hr>10)
       last_dis_hr = dis_hr;
       
       
       if(dis_spo2>0)
-      Line(dis_spo2_x,319-last_dis_spo2,dis_spo2_x+3,319-dis_spo2,BLUE);     //显示血氧曲线
+      Line(dis_spo2_x,319-last_dis_spo2,dis_spo2_x+2,319-dis_spo2,BLUE);     //显示血氧曲线
       dis_spo2_x = dis_spo2_x+2;
       
       if(dis_spo2_x>479)

@@ -498,7 +498,7 @@ typedef __packed struct
 	u16 pic_message_head_len_l;	//8
 	u16 pic_message_head_len_h;	//9
 	u16 pic_w_l;					//10
-	u16 pic_w_h;				    //11
+	u16 pic_w_h;				    //11+
 	u16 pic_h_l;				    //12
 	u16 pic_h_h;				    //13	
 	u16 pic_bit;				    //14

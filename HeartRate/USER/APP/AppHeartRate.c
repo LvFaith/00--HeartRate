@@ -14,7 +14,7 @@ int32_t n_heart_rate;   //heart rate value
 int8_t  ch_hr_valid;    //indicator to show if the heart rate calculation is valid
 uint8_t uch_dummy;
 u8 dis_hr=0,dis_spo2=0,dis_data_ready = 0;
-
+u32 dis_heart_data = 0 ,dis_heart_data2 = 0;
 #define MAX_BRIGHTNESS 255
 
 
@@ -91,6 +91,9 @@ void ProcessMaxTask(void const * argument)
             aun_red_buffer[i] =  (long)((long)((long)temp[0]&0x03)<<16) | (long)temp[1]<<8 | (long)temp[2];    // Combine values to get the actual number
             aun_ir_buffer[i] = (long)((long)((long)temp[3] & 0x03)<<16) |(long)temp[4]<<8 | (long)temp[5];   // Combine values to get the actual number
         
+            dis_heart_data = aun_red_buffer[i];
+            dis_heart_data2 = aun_ir_buffer[i];
+            
             if(aun_red_buffer[i]>un_prev_data)
             {
                 f_temp=aun_red_buffer[i]-un_prev_data;
