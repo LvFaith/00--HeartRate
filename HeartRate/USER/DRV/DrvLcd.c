@@ -152,6 +152,9 @@ WriteData(0x68); //横屏，从左下角开始，从左到右，从下到上
 //HAL_SPI_TransmitReceive_DMA(&hspi2, &reg_test, lcd_data_receive, 2);
 //Delay(10);
 
+//clean_dis_curve();
+//while(1);
+
 WriteComm(0x36);//竖屏
 WriteData(0x48);//
 InitLcdPic();     //刷屏初始化原始界面
@@ -214,6 +217,35 @@ void InitLcdPic(void)
         
     }
   }
+}
+
+void clean_dis_curve(void)
+{
+	int a,i,j;
+  
+  WriteComm(0x36);//竖屏
+  WriteData(0x48);//
+  
+  BlockWrite_V(0,278,0,439);
+  for(i=0;i<440;i++)
+  {	
+    for(j=0;j<279;j++)
+		{
+        if(j==138 || j==139)
+        {
+            WriteData(RED>>8);
+            WriteData(RED); 
+        }
+        else
+        {
+            WriteData(GRAY>>8);
+            WriteData(GRAY); 
+        }
+    }
+  }
+  
+  WriteComm(0x36); //Set_address_mode
+  WriteData(0x6A); //横屏，从左下角开始，从左到右，从下到上
 }
 
 

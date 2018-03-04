@@ -63,6 +63,7 @@ void print_num(u16 x,u16 y,u16 num);
 void Line(unsigned int X0,unsigned int Y0,unsigned int X1,unsigned int Y1,unsigned int color);
 void LCD_Fill_Block(unsigned int X0,unsigned int Y0,unsigned int X1,unsigned int Y1,unsigned int color);
 void InitLcdPic(void);
+void clean_dis_curve(void);
 /*定义常见颜色*/
 // #define red 0x001f
 // #define blue 0xf800

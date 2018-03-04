@@ -79,6 +79,7 @@ u8 max_wr_ptr;
 u8 max_rd_ptr;
 extern u8 dis_hr,dis_spo2,dis_data_ready;
 u8 last_dis_hr = 0, last_dis_spo2 = 0;
+u8 is_dis_flag = 0;
 /* USER CODE END FunctionPrototypes */
 
 /* Hook prototypes */
@@ -127,6 +128,42 @@ void MX_FREERTOS_Init(void) {
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
 }
+extern uint32_t aun_ir_buffer[500]; //IR LED sensor data
+extern uint32_t aun_red_buffer[500];    //Red LED sensor data
+
+void dis_DrawCurve(u32* data,u8 x)
+{
+	u16 i;
+	u32 max=0,min=262144;
+	u32 temp;
+	u32 compress;
+	
+	for(i=0;i<440;i++)
+	{
+		if(data[i]>max)
+		{
+			max = data[i];
+		}
+		if(data[i]<min)
+		{
+			min = data[i];
+		}
+	}
+	
+	compress = (max-min)/138;
+	
+	for(i=0;i<440;i++)
+	{
+		temp = data[i];
+		temp -= min;
+		temp/=compress;
+		if(temp>138)temp=138;
+    
+    DrawPixel(i+41,319-x-temp,BLUE);
+   
+//		OLED_DrawPoint(i,63-x-temp,1);
+	}
+}
 
 /* StartDefaultTask function */
 void StartDefaultTask(void const * argument)
@@ -137,15 +174,23 @@ void StartDefaultTask(void const * argument)
   u8 num = 0;
   u16 hr_x = 40;
   u16 dis_spo2_x = 40;
+  u8 dis_delay = 0;
   /* Infinite loop */
   for(;;)
   {
     if(dis_hr>10 && dis_spo2!=0 && dis_data_ready == 1)
     {
-      dis_data_ready = 0;
+      dis_data_ready = 0;    
+      if(!is_dis_flag)    
+      {        
+        dis_DrawCurve(aun_red_buffer,140);
+        dis_DrawCurve(aun_ir_buffer,0);
+        is_dis_flag = 1;
+      }
+     
       print_num(190,13,dis_hr);//显示心率
       print_num(318,13,dis_spo2); //显示血氧浓度
-      
+#if 0      
       if(dis_hr>10)
       Line(hr_x,178-last_dis_hr,hr_x+2,178-dis_hr,BLUE);   //显示心率曲线  
       hr_x = hr_x+2;
@@ -165,7 +210,19 @@ void StartDefaultTask(void const * argument)
       
       if(dis_spo2>30)
       last_dis_spo2 = dis_spo2;
+#endif
     }
+    if(is_dis_flag)
+      dis_delay ++;
+    
+    
+    if(dis_delay>3)
+    {
+      clean_dis_curve();
+      is_dis_flag = 0;
+      dis_delay = 0;
+    }
+    
     osDelay(5);
   }
   /* USER CODE END StartDefaultTask */

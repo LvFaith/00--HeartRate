@@ -23,6 +23,7 @@ u32 dis_heart_data = 0 ,dis_heart_data2 = 0;
 
 #if 1
 
+
 void ProcessMaxTask(void const * argument)
 {
   /* USER CODE BEGIN ProcessMaxTask */
@@ -133,6 +134,7 @@ void ProcessMaxTask(void const * argument)
         
         
         maxim_heart_rate_and_oxygen_saturation(aun_ir_buffer, n_ir_buffer_length, aun_red_buffer, &n_sp02, &ch_spo2_valid, &n_heart_rate, &ch_hr_valid);
+
         osDelay(1);
   }
   /* USER CODE END ProcessMaxTask */
