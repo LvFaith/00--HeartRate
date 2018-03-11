@@ -35,7 +35,7 @@ void WriteData(u8 tem_data)
 	LCD_RS(1);
 //  HAL_SPI_Transmit(&hspi2, (u8*)&tem_data, 1,1000);
 //  HAL_SPI_Transmit_DMA(&hspi2, (u8*)&tem_data, 1);
-  HAL_SPI_TransmitReceive_DMA(&hspi2, &tem_data, &rx_data_buf, 1);
+  HAL_SPI_TransmitReceive_DMA(&hspi2, &tem_data, &rx_data_buf, 1);  //必须用TransmitReceive这个函数  只有Transmit的不可以！！！
 }
 void Write_Data_U16(unsigned int Color_U16)
 {
